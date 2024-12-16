@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -64,7 +65,7 @@
   </style>
 </head>
 <body>
-  <h1>Do you like me Hafsa? ❤️</h1>
+  <h1>Do you like me? ❤️</h1>
   <div class="button-container">
     <button id="yes">Yes</button>
     <button id="no">No</button>
@@ -85,11 +86,13 @@
     ];
     let messageIndex = 0;
 
+    // Handle "Yes" button click
     yesButton.addEventListener("click", function () {
       message.innerHTML = "Yay! ❤❤ I knew you'd say YES! You're the best! 😍";
       mockingMessage.innerHTML = "";
     });
 
+    // Function to move the button randomly
     function runaway(id) {
       const maxX = window.innerWidth - id.offsetWidth;
       const maxY = window.innerHeight - id.offsetHeight;
@@ -97,12 +100,23 @@
       id.style.left = Math.round(Math.random() * maxX) + 'px';
     }
 
-    noButton.addEventListener("mouseover", function () {
-      runaway(noButton);
+    // Update mocking message
+    function updateMockingMessage() {
       mockingMessage.innerHTML = mockingMessages[messageIndex];
       if (messageIndex < mockingMessages.length - 1) {
         messageIndex++;
       }
+    }
+
+    // Add events for "No" button to handle desktop and mobile
+    noButton.addEventListener("mouseover", function () {
+      runaway(noButton);
+      updateMockingMessage();
+    });
+
+    noButton.addEventListener("touchstart", function () {
+      runaway(noButton);
+      updateMockingMessage();
     });
   </script>
 </body>
