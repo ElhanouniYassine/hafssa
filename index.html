@@ -12,7 +12,7 @@
       background-color: #ffe6f2;
       position: relative;
       height: 100vh;
-      overflow: auto; /* Scrollbars allowed */
+      overflow: auto;
     }
     h1 {
       color: #ff4d88;
@@ -62,10 +62,38 @@
       left: 50%;
       transform: translateX(-50%);
     }
+    #popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      border: 2px solid #ff80bf;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    #popup svg {
+      margin-top: 10px;
+      width: 50px;
+      height: 50px;
+      fill: #ff4d88;
+    }
+    #popup .close-btn {
+      margin-top: 10px;
+      background-color: #ff80bf;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <h1>Do you like me Hafsa? ❤️</h1>
+  <h1>Do you like me, Hafsa? ❤️</h1>
   <div class="button-container">
     <button id="yes">Yes</button>
     <button id="no">No</button>
@@ -73,31 +101,62 @@
   <p id="message"></p>
   <p id="mockingMessage"></p>
 
+  <div id="popup">
+    <h2>Yay! ❤❤ I knew you'd say YES!</h2>
+    <p>You're the best! 😍</p>
+    <p>Tstya Nichan wlah😂</p>
+    
+    <button class="close-btn">Close</button>
+  </div>
+
   <script>
     const yesButton = document.getElementById("yes");
     const noButton = document.getElementById("no");
     const message = document.getElementById("message");
     const mockingMessage = document.getElementById("mockingMessage");
+    const popup = document.getElementById("popup");
+    const closeBtn = document.querySelector(".close-btn");
 
     const mockingMessages = [
       "Ha ha! You can't catch me! 😜",
       "Hafsa don't click me",
-      "no not me HAFSA 😩 ,click on YES"
+      "No not me HAFSA 😩, click on YES"
     ];
     let messageIndex = 0;
 
-    // Handle "Yes" button click
+    // Show popup on "Yes" click
     yesButton.addEventListener("click", function () {
-      message.innerHTML = "Yay! ❤❤ I knew you'd say YES! You're the best! 😍 , Tstya nichan 😂";
-      mockingMessage.innerHTML = "";
+      popup.style.display = "block";
     });
 
-    // Function to move the button randomly
+    // Close popup
+    closeBtn.addEventListener("click", function () {
+      popup.style.display = "none";
+    });
+
+    // Function to move the "No" button randomly
     function runaway(id) {
       const maxX = window.innerWidth - id.offsetWidth;
       const maxY = window.innerHeight - id.offsetHeight;
-      id.style.top = Math.round(Math.random() * maxY) + 'px';
-      id.style.left = Math.round(Math.random() * maxX) + 'px';
+
+      let randomX, randomY;
+
+      do {
+        randomX = Math.random() * maxX;
+        randomY = Math.random() * maxY;
+      } while (
+        (randomX >= yesButton.offsetLeft - noButton.offsetWidth &&
+          randomX <= yesButton.offsetLeft + yesButton.offsetWidth) ||
+        (randomY >= yesButton.offsetTop - noButton.offsetHeight &&
+          randomY <= yesButton.offsetTop + yesButton.offsetHeight) ||
+        (randomY >= document.querySelector("h1").offsetTop - noButton.offsetHeight &&
+          randomY <= document.querySelector("h1").offsetTop + document.querySelector("h1").offsetHeight) ||
+        (randomY >= mockingMessage.offsetTop - noButton.offsetHeight &&
+          randomY <= mockingMessage.offsetTop + mockingMessage.offsetHeight)
+      );
+
+      id.style.left = randomX + "px";
+      id.style.top = randomY + "px";
     }
 
     // Update mocking message
